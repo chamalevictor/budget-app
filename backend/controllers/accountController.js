@@ -4,9 +4,24 @@ import pool from "../configs/db.js";
 const getAccounts = async (req, res) => {
   try {
     const accounts = await pool.query(
-      "SELECT * FROM account WHERE id_end_user = $1",
+      `SELECT a.id_account as Account_ID, b.name as Bank, at.name as Account_Type, c.name as Currency, a.active as State, 
+      (SELECT SUM(t.ammount)
+        FROM transaction t
+        WHERE a.id_account = t.id_account
+       ) as balance
+	  FROM account a
+      INNER JOIN bank b
+      ON b.id_bank = a.id_bank
+      INNER JOIN account_type at
+      ON at.id_account_type = a.id_account_type
+      INNER JOIN currency c
+      ON c.id_currency = a.id_currency
+	  WHERE id_end_user = $1
+    AND a.active = true 
+      `,
       [req.user.rows[0].id_end_user]
     );
+
     res.json(accounts.rows);
   } catch (error) {
     console.log(error);
@@ -43,13 +58,18 @@ const getAccount = async (req, res) => {
 // Create an account.
 const createAccount = async (req, res) => {
   console.log(req.body);
-  const { id_account, id_end_user, id_bank, id_account_type, id_currency } =
-    req.body;
+  const { id_account, id_bank, id_account_type, id_currency } = req.body;
   try {
     const newAccount = await pool.query(
-      `INSERT INTO account (id_account, id_end_user, id_bank, id_account_type, id_currency)
-                VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [id_account, id_end_user, id_bank, id_account_type, id_currency]
+      `INSERT INTO account (id_account, id_end_user, id_bank, id_account_type, id_currency, active)
+                VALUES ($1, $2, $3, $4, $5, true) RETURNING *`,
+      [
+        id_account,
+        req.user.rows[0].id_end_user,
+        id_bank,
+        id_account_type,
+        id_currency,
+      ]
     );
     res.json(newAccount.rows[0]);
   } catch (error) {
@@ -92,6 +112,19 @@ const updateAccount = async (req, res) => {
   }
 };
 
-const deleteAccount = async (req, res) => {};
+const deleteAccount = async (req, res) => {
+  const { account_id } = req.body;
+  try {
+    const deletedAccount = await pool.query(
+      `UPDATE account SET active = false WHERE id_account = $1 RETURNING *
+      `,
+      [account_id]
+    );
+
+    res.json(deleteAccount.rows);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export { getAccount, getAccounts, createAccount, updateAccount, deleteAccount };

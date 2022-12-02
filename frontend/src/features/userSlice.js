@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: {},
+  users: {},
   authenticated: false,
   alert: { msg: "", error: false },
 };
@@ -11,7 +11,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setLoggedUser(state, action) {
-      state.user = action.payload;
+      state.users = action.payload;
       state.authenticated = true;
     },
     setAlertMessage(state, action) {

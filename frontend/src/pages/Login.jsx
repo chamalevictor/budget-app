@@ -1,58 +1,36 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
-import { loginUser, setAlertMessage } from "../features/userServices";
-
+import { loginUser } from "../features/userServices";
+import { userActions } from "../features/userSlice";
 import { useSelector, useDispatch } from "react-redux";
+import Title from "../components/Title";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { alert, authenticated } = useSelector((state) => state.user);
+  const { users, alert, authenticated } = useSelector((state) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //const [alert, setAlert] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if ([email, password].includes("")) {
-    //   setAlert({
-    //     msg: "Todos los campos son obligatorios",
-    //     error: true,
-    //   });
-    //   return;
-    // }
-
-    // try {
-    //   const { data } = await axiosClient.post("/users/login", {
-    //     email,
-    //     password,
-    //   });
-    //   setAlert({});
-    //   localStorage.setItem("token", data.token);
-    // } catch (error) {
-    //   setAlert({
-    //     msg: error.response.data.msg,
-    //     error: true,
-    //   });
-    // }
-    dispatch(loginUser({ email, password }));
-    // setAlert({
-    //   msg: error.response.data.msg,
-    //   error: true,
-    // });
+    dispatch(loginUser({ email, password })); // Authenticates user.
   };
 
   useEffect(() => {
     if (authenticated) {
+      localStorage.setItem("token", users.token);
+
       navigate("/dashboard");
     }
 
     return () => {
+      // Set alert back to empty when component unmounts.
       dispatch(
-        setAlertMessage({
-          msg: error.response.data.msg,
-          error: true,
+        userActions.setAlertMessage({
+          msg: "",
+          error: false,
         })
       );
     };
@@ -62,10 +40,7 @@ const Login = () => {
 
   return (
     <>
-      <h1 className="text-sky-600 font-black text-6xl capitalize">
-        Administra tus finanzas
-        <span className="text-slate-700"> personales</span>
-      </h1>
+      <Title lightText={"Administra tus finanzas"} darkText={"Personales"} />
       {msg && <Alert alert={alert} />}
       <form
         onSubmit={handleSubmit}

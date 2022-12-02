@@ -53,6 +53,7 @@ const authenticateUser = async (req, res) => {
     `SELECT * FROM end_user WHERE email = $1`,
     [email]
   );
+
   if (existingUser.rows.length === 0) {
     // If rows comes back empty, means no user was found with that email.
     const error = new Error("No existe una cuenta creada para este usuario.");
@@ -69,6 +70,7 @@ const authenticateUser = async (req, res) => {
   const authenticatePassword = async (password) => {
     return await bcrypt.compare(password, existingUser.rows[0].password); // Compares password sent vs password in db.
   };
+
   if (await authenticatePassword(password)) {
     res.json({
       id_end_user: existingUser.rows[0].id_end_user,
