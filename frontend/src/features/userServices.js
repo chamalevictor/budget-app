@@ -7,7 +7,7 @@ export const loginUser = createAsyncThunk(
   async (user, thunkApi) => {
     try {
       const { data } = await axiosClient.post("/users/login", user);
-      console.log(data);
+
       if (data) {
         thunkApi.dispatch(userActions.setLoggedUser(data));
       }
