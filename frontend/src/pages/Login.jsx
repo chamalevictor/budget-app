@@ -21,7 +21,6 @@ const Login = () => {
   useEffect(() => {
     if (authenticated) {
       localStorage.setItem("token", users.token);
-
       navigate("/dashboard");
     }
 
