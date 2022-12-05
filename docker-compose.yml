@@ -1,0 +1,38 @@
+services:
+  # Frontend service
+  frontend:
+    container_name: frontend1
+    image: frontend:0.1.0-alpine
+    ports:
+      - 3000:3000
+    networks:
+      - shared-network
+  # Backend service
+  backend:
+    container_name: backend1
+    image: backend:0.1.0
+    ports:
+      - 4000:4000
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PASS=mypass
+    networks:
+      - shared-network
+  # Database service
+  postgres:
+    container_name: postgres1
+    image: postgres:14.6
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_PASSWORD=mypass
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - /Users/victorchamale/Documents/projects/javascript/telus/budget/db:/docker-entrypoint-initdb.d
+    networks:
+      - shared-network
+volumes:
+  pgdata:
+networks:
+  shared-network:

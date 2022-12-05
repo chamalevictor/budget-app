@@ -39,7 +39,6 @@ const Transfer = ({ refresh }) => {
       ammount,
     };
     dispatch(newTransfer(newTransferObj));
-    console.log(newTransferObj);
     // setAlert({
     //   msg: "Transferencia realizada con éxito",
     //   error: false,

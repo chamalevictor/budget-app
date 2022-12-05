@@ -57,7 +57,6 @@ const getAccount = async (req, res) => {
 // TODO: Pending to mark account as deleted.
 // Create an account.
 const createAccount = async (req, res) => {
-  console.log(req.body);
   const { id_account, id_bank, id_account_type, id_currency } = req.body;
   try {
     const newAccount = await pool.query(

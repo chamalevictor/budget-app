@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  getAllTransactions,
-  newTransaction,
-} from "../features/transactionServices";
-import { getAccounts } from "../features/accountService";
+import { newTransaction } from "../features/transactionServices";
 import Button from "./Button";
 import SelectAccount from "./SelectAccount";
 import SelectCategoriy from "./SelectCategory";
@@ -65,7 +61,6 @@ const NewTransaction = ({ refresh }) => {
     }
 
     dispatch(newTransaction(newTransactionObj));
-    refresh();
 
     setAlert({
       msg: "Realizado con exito",
@@ -77,6 +72,7 @@ const NewTransaction = ({ refresh }) => {
     setDescription("");
     setCurrency("DEFAULT");
     setAmmount(0);
+    refresh();
   };
   const { msg } = alert;
   return (

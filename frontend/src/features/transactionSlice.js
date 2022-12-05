@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   transactions: [],
   loadingTransactions: false,
+  transactionCompleted: false,
   links: {
     linkTo: "accounts",
     linkName: "cuentas",
@@ -22,8 +23,8 @@ export const transactionSlice = createSlice({
     loadingTransactions(state, action) {
       state.loadingTransactions = action.payload;
     },
-    setLinks(state, action) {
-      state.links = action.payload;
+    transactionCompleted(state, action) {
+      state.transactionCompleted = action.payload;
     },
   },
 });

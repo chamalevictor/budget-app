@@ -51,6 +51,7 @@ export const newTransaction = createAsyncThunk(
     } finally {
       setTimeout(() => {
         thunkApi.dispatch(transactionActions.loadingTransactions(false));
+        thunkApi.dispatch(transactionActions.transactionCompleted(true));
       }, 1500);
     }
   }
