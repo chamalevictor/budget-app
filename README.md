@@ -1,14 +1,22 @@
 # Budget App 
 Use this app to keep track of all your finances. Your expenses as well as your incomes. You can register your bank accounts and also whatever you have in cash so you don't miss a penny.
 
-## Cloning the Repo...
+### Cloning the Repo...
 Run a ``` git clone git@github.com:chamalevictor/budget-app.git ``` from whatever folder you want to work on.
 
-Once you have cloned it, you can access to the frontend directory by running ``` cd frontend ``` from the parent directory and then installing the dependencies with ``` npm install ```
+### Installing dependencies
+Once you have cloned it, you need to access to each part of the project and install dependencies.
 
+Start by accessing to the frontend directory by running ``` cd frontend ``` from the parent directory and then installing the dependencies with ``` npm install ```
 
-### Create database
+Next, access to the backend directory ``` cd ../backend ``` (if you're still in the frontend) and also run ``` npm install ```
 
+Finally you will find the SQL script in the ``` db ``` folder. You can create the database manually or build a container that will automatically do it for you (see below).
+
+#### Create Database Container.
+Note: It is important that you have Docker installed in order to run this command.
+
+Create Database Container:
 ```
 docker run -e POSTGRES_PASSWORD=mypass -d -p 5433:5432 \
 -e PGDATA=/var/lib/postgresql/data/pgdata \
