@@ -1,3 +1,7 @@
+# Budget App 
+Use this app to keep track of your budget. Expenses as well as your incomes, you can register your bank accounts and whatever you have in cash so you don't miss a penny.
+
+
 ### Create database
 
 ```
