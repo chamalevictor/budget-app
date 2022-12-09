@@ -20,7 +20,7 @@ Finally you will find the SQL script in the ``` db ``` folder. You can create th
 
 
 #### Create Database Container.
-Note: It is important that you have Docker installed in order to run this command. You can get Docker from here. 
+Note: It is important that you have Docker installed in order to run this command. You can get Docker from [here](https://docs.docker.com/get-docker/). 
 
 Create Database Container:
 ```
