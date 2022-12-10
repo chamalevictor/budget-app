@@ -7,7 +7,7 @@
 
 FROM node:16-alpine3.15
 
-ENV VITE_BACKEND_URL=http://localhost:4000
+ENV VITE_BACKEND_URL=http://35.184.210.160:4000
 
 COPY . /opt/app
 

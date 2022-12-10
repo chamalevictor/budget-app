@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: back-app
-          image: victor750/budget-app-backend:4.4.4
+          image: victor750/budget-app-backend:7.7.7
           env:
             - name: DB_PASSWORD
               valueFrom:
