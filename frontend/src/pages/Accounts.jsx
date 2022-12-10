@@ -1,15 +1,26 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAccounts } from "../features/accountService";
 import Account from "../components/Account";
 import AccountForm from "../components/AccountForm";
 import Title from "../components/Title";
 import Button from "../components/Button";
 import Header from "../components/Header";
+import { useEffect } from "react";
 
 const Accounts = () => {
-  const { accounts } = useSelector((state) => state.accounts);
+  const dispatch = useDispatch();
+  const { accounts, createAccountComplete } = useSelector(
+    (state) => state.accounts
+  );
   const [addAccount, setAddAccount] = useState(false);
+
+  useEffect(() => {
+    if (createAccountComplete) {
+      dispatch(getAccounts());
+    }
+  }, [createAccountComplete]);
 
   const accountsList =
     accounts.length > 0 &&

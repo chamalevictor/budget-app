@@ -18,6 +18,11 @@ export const userSlice = createSlice({
       state.alert.msg = action.payload.msg;
       state.alert.error = action.payload.error;
     },
+    logOutUser(state, action) {
+      state.users = {};
+      state.authenticated = false;
+      state.alert = { msg: "", error: false };
+    },
   },
 });
 

@@ -68,7 +68,7 @@ const TransactionSummary = ({ transactionsListProp }) => {
                       </th>
                       <th
                         scope="col"
-                        className="text-lg font-medium px-6 pt-4 text-left"
+                        className="text-lg font-medium px-6 py-4 text-left"
                       >
                         No. Referencia
                       </th>

@@ -59,7 +59,15 @@ const newTransaction = async (req, res) => {
 };
 
 const makeTransfer = async (req, res) => {
-  const { transferDate, origin, destination, currency, ammount } = req.body;
+  const {
+    transferDate,
+    origin,
+    destination,
+    currency,
+    destinationCurrency,
+    ammount,
+    destinationAmmount,
+  } = req.body;
   try {
     const expense = await pool.query(
       `INSERT INTO transaction (date_transaction, id_account, id_transaction_type, id_category, description, id_currency, ammount)
@@ -84,8 +92,8 @@ const makeTransfer = async (req, res) => {
           1,
           8,
           `Transferencia desde ${origin}`,
-          currency,
-          ammount,
+          destinationCurrency,
+          destinationAmmount,
         ]
       );
     }

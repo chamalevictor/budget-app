@@ -19,7 +19,12 @@ const TransactionRow = ({ transaction }) => {
       <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900">
         {transaction.currency}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900">
+      <td
+        className={`px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900 ${
+          transaction.currency == "Dólares" ? "enMoney" : "esMoney"
+        }`}
+      >
+        {" "}
         {transaction.ammount}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900 text-center">

@@ -5,7 +5,7 @@ const SelectCurrency = ({ setCurrency, currency }) => {
 
   const currenciesList =
     currencies.length > 0 &&
-    currencies.map((item) => {
+    currencies.slice(0, 2).map((item) => {
       return (
         <option key={item.id_currency} value={item.id_currency}>
           {item.name}

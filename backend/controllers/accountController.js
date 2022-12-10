@@ -4,7 +4,7 @@ import pool from "../configs/db.js";
 const getAccounts = async (req, res) => {
   try {
     const accounts = await pool.query(
-      `SELECT a.id_account as Account_ID, b.name as Bank, at.name as Account_Type, c.name as Currency, a.active as State, 
+      `SELECT a.id_account as Account_ID, b.name as Bank, at.name as Account_Type, c.id_currency as currency_id, c.name as Currency, a.active as State, 
       (SELECT SUM(t.ammount)
         FROM transaction t
         WHERE a.id_account = t.id_account

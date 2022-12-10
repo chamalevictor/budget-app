@@ -4,10 +4,7 @@ const initialState = {
   transactions: [],
   loadingTransactions: false,
   transactionCompleted: false,
-  links: {
-    linkTo: "accounts",
-    linkName: "cuentas",
-  },
+  transferCompleted: false,
 };
 
 export const transactionSlice = createSlice({
@@ -25,6 +22,9 @@ export const transactionSlice = createSlice({
     },
     transactionCompleted(state, action) {
       state.transactionCompleted = action.payload;
+    },
+    transferCompleted(state, action) {
+      state.transferCompleted = action.payload;
     },
   },
 });

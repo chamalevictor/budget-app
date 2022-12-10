@@ -1,11 +1,20 @@
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
+import { userActions } from "../features/userSlice";
 
 const Header = ({ linkTo, linkName }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user);
   const today = new Date();
   const now = today.toLocaleDateString("es-GT");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(userActions.logOutUser());
+    navigate("/");
+  };
 
   return (
     <header className="px-4 py-5 bg-white border-b">
@@ -25,7 +34,7 @@ const Header = ({ linkTo, linkName }) => {
             {linkName}{" "}
           </Link>
 
-          <Button title={"Cerrar Sesión"} />
+          <Button title={"Cerrar Sesión"} onClickAction={handleLogout} />
         </div>
       </div>
     </header>
