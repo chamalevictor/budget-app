@@ -1,16 +1,16 @@
 services:
   # Frontend service
   frontend:
-    container_name: frontend1
-    image: frontend:0.1.0-alpine
+    container_name: frontend-1
+    image: victor750/budget-app-frontend:2.2.2
     ports:
       - 3000:3000
     networks:
       - shared-network
   # Backend service
   backend:
-    container_name: backend1
-    image: backend:0.1.0
+    container_name: backend-1
+    image: victor750/budget-app-backend:2.2.2
     ports:
       - 4000:4000
     environment:
@@ -20,7 +20,7 @@ services:
       - shared-network
   # Database service
   postgres:
-    container_name: postgres1
+    container_name: postgres-1
     image: postgres:14.6
     ports:
       - 5433:5432
@@ -29,7 +29,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - /Users/victorchamale/Documents/projects/javascript/telus/budget/db:/docker-entrypoint-initdb.d
+      - ./db:/docker-entrypoint-initdb.d
     networks:
       - shared-network
 volumes:
