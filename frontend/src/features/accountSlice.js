@@ -2,12 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   accounts: [],
+  singleAccount: [],
+  destinationAccount: [],
   accountTypes: [],
   categories: [],
   banks: [],
   currencies: [],
   alert: { msg: "", error: false },
   loading: true,
+  createAccountComplete: false,
 };
 
 export const accountSlice = createSlice({
@@ -16,6 +19,7 @@ export const accountSlice = createSlice({
   reducers: {
     getAllAccounts(state, action) {
       state.accounts = action.payload;
+      state.singleAccount = action.payload;
     },
     loadingAccounts(state, action) {
       state.loading = action.payload;
@@ -34,6 +38,19 @@ export const accountSlice = createSlice({
     },
     createAccount(state, action) {
       state.accounts = [...state.accounts, action.payload];
+    },
+    createNewAccountCompleted(state, action) {
+      state.createAccountComplete = action.payload;
+    },
+    getSingleAccount(state, action) {
+      state.singleAccount = state.accounts.filter(
+        (account) => account.account_id == action.payload
+      );
+    },
+    setDestinationAccount(state, action) {
+      state.destinationAccount = state.accounts.filter(
+        (account) => account.account_id == action.payload
+      );
     },
   },
 });

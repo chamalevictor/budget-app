@@ -16,3 +16,7 @@
 .esMoney::before {
   content: "Q";
 }
+
+.enMoney::before {
+  content: "$";
+}

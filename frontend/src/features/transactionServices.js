@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { transactionActions } from "./transactionSlice.js";
 import axiosClient from "../config/axiosClient";
-import { accountActions } from "./accountSlice.js";
 
 const getConfig = () => {
   const token = localStorage.getItem("token");
@@ -28,6 +27,8 @@ export const getAllTransactions = createAsyncThunk(
     } finally {
       setTimeout(() => {
         thunkApi.dispatch(transactionActions.loadingTransactions(false));
+        thunkApi.dispatch(transactionActions.transactionCompleted(false));
+        thunkApi.dispatch(transactionActions.transferCompleted(false));
       }, 750);
     }
   }
@@ -52,7 +53,7 @@ export const newTransaction = createAsyncThunk(
       setTimeout(() => {
         thunkApi.dispatch(transactionActions.loadingTransactions(false));
         thunkApi.dispatch(transactionActions.transactionCompleted(true));
-      }, 1500);
+      }, 1000);
     }
   }
 );
@@ -68,7 +69,8 @@ export const newTransfer = createAsyncThunk(
     } catch (error) {
       console.log(error);
     } finally {
-      thunkApi.dispatch(transactionActions.loadingTransactions(true));
+      thunkApi.dispatch(transactionActions.loadingTransactions(false));
+      thunkApi.dispatch(transactionActions.transferCompleted(true));
     }
   }
 );

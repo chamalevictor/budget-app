@@ -1,24 +1,22 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SelectAccount from "./SelectAccount";
-import CurrenciesRadioButton from "./CurrenciesRadioButton";
 import { newTransfer } from "../features/transactionServices";
 import Alert from "./Alert";
+import SelectDestinationAccount from "./SelectDestinationAccount";
+import { currencyConverter, generateDate } from "../helpers/currencyConverter";
 
-const Transfer = ({ refresh }) => {
+const Transfer = () => {
+  const { singleAccount, destinationAccount } = useSelector(
+    (state) => state.accounts
+  );
   const dispatch = useDispatch();
+
   const [origin, setOrigin] = useState("DEFAULT");
   const [destination, setDestination] = useState("DEFAULT");
-  const [currency, setCurrency] = useState(false);
   const [ammount, setAmmount] = useState(0);
   const [alert, setAlert] = useState({});
-
-  const today = new Date().toLocaleDateString("es-GT").split("T")[0];
-  const transferDate = today
-    .split("/")
-    .reverse()
-    .join("/")
-    .replace(/[\/]/g, "-");
+  const transferDate = generateDate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,23 +28,38 @@ const Transfer = ({ refresh }) => {
       });
     }
 
+    if (
+      Number(singleAccount[0].balance).toFixed(2) < Number(ammount).toFixed(2)
+    ) {
+      console.log(singleAccount[0].balance, ammount);
+      setAlert({
+        msg: "El monto ingresado supera el disponible en cuenta",
+        error: true,
+      });
+      return;
+    }
     setAlert({});
     const newTransferObj = {
       transferDate,
       origin,
       destination,
-      currency,
+      currency: singleAccount[0].currency_id,
+      destinationCurrency: destinationAccount[0].currency_id,
       ammount,
+      destinationAmmount: currencyConverter(
+        singleAccount[0].currency_id,
+        destinationAccount[0].currency_id,
+        ammount
+      ),
     };
+
     dispatch(newTransfer(newTransferObj));
-    // setAlert({
-    //   msg: "Transferencia realizada con éxito",
-    //   error: false,
-    // });
-    refresh();
+    setAlert({
+      msg: "Transferencia realizada con éxito",
+      error: false,
+    });
     setOrigin("DEFAULT");
     setDestination("DEFAULT");
-    setCurrency(0);
     setAmmount(0);
   };
   const { msg } = alert;
@@ -74,7 +87,10 @@ const Transfer = ({ refresh }) => {
             Destino
           </label>
 
-          <SelectAccount setAccount={setDestination} account={destination} />
+          <SelectDestinationAccount
+            setAccount={setDestination}
+            account={destination}
+          />
         </div>
 
         <div className="mb-5">
@@ -82,13 +98,10 @@ const Transfer = ({ refresh }) => {
             className="text-gray-700 uppercase front-bold text-sm "
             htmlFor="currency"
           >
-            Moneda
+            Moneda de Origen
           </label>
           <div className="flex justify-between py-3 px-6 mb-3" id="currency">
-            <CurrenciesRadioButton
-              setCurrency={setCurrency}
-              currency={currency}
-            />
+            {singleAccount[0]?.currency ? singleAccount[0].currency : "nada"}
           </div>
         </div>
         <div className="accountNumber mb-5">

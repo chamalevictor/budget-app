@@ -6,9 +6,12 @@ import SelectCategoriy from "./SelectCategory";
 import SelectCurrency from "./SelectCurrency";
 import SelectTransactionType from "./SelectTransactionType";
 import Alert from "./Alert";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import TableHead from "./TableHead";
+import { generateDate } from "../helpers/currencyConverter";
 
-const NewTransaction = ({ refresh }) => {
+const NewTransaction = () => {
+  const { singleAccount } = useSelector((state) => state.accounts);
   const dispatch = useDispatch();
   const [account, setAccount] = useState("DEFAULT");
   const [transactionType, setTransactionType] = useState("DEFAULT");
@@ -18,16 +21,22 @@ const NewTransaction = ({ refresh }) => {
   const [ammount, setAmmount] = useState(0);
   const [alert, setAlert] = useState({});
 
-  const today = new Date().toLocaleDateString("es-GT").split("T")[0];
-  const transactionDate = today
-    .split("/")
-    .reverse()
-    .join("/")
-    .replace(/[\/]/g, "-");
+  const clearFields = () => {
+    setAccount("DEFAULT");
+    setTransactionType("DEFAULT");
+    setCategory("DEFAULT");
+    setDescription("");
+    setCurrency("DEFAULT");
+    setAmmount(0);
+  };
+
+  const transactionDate = generateDate();
 
   const handleSubmit = (e) => {
+    setAlert({});
     e.preventDefault();
 
+    // Validation.
     if (
       [
         account,
@@ -42,7 +51,6 @@ const NewTransaction = ({ refresh }) => {
         msg: "Todos los campos son obligatorios",
         error: true,
       });
-      console.log("elemento vacio");
       return;
     }
 
@@ -52,27 +60,26 @@ const NewTransaction = ({ refresh }) => {
       transactionType,
       category,
       description,
-      currency,
+      currency: singleAccount[0].currency_id,
       ammount,
     };
 
     if (transactionType == 2) {
-      newTransactionObj.ammount = -Math.abs(newTransactionObj.ammount);
+      if (
+        Number(ammount).toFixed(2) < Number(singleAccount[0].balance).toFixed(2)
+      ) {
+        newTransactionObj.ammount = -1 * newTransactionObj.ammount; // convert it to negative.
+      } else {
+        setAlert({
+          msg: `El monto excede el disponible de la cuenta ${account}`,
+          error: true,
+        });
+        clearFields();
+        return;
+      }
     }
-
-    dispatch(newTransaction(newTransactionObj));
-
-    setAlert({
-      msg: "Realizado con exito",
-      error: false,
-    });
-    setAccount("DEFAULT");
-    setTransactionType("DEFAULT");
-    setCategory("DEFAULT");
-    setDescription("");
-    setCurrency("DEFAULT");
-    setAmmount(0);
-    refresh();
+    dispatch(newTransaction(newTransactionObj)); // Store it.
+    clearFields();
   };
   const { msg } = alert;
   return (
@@ -88,46 +95,7 @@ const NewTransaction = ({ refresh }) => {
           <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
             <div className="overflow-hidden rounded-lg">
               <table className="min-w-full mb-3">
-                <thead className="bg-sky-600 text-white border-b">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="text-lg font-medium  px-6 py-4 text-left"
-                    >
-                      Cuenta
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-lg font-medium px-6 py-4 text-left"
-                    >
-                      Tipo
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-lg font-medium px-6 py-4 text-left"
-                    >
-                      Categoría
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-lg font-medium px-6 py-4 text-left"
-                    >
-                      Descripcion
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-lg font-medium px-6 py-4 text-left"
-                    >
-                      Moneda
-                    </th>
-                    <th
-                      scope="col"
-                      className="text-lg font-medium px-6 py-4 text-left"
-                    >
-                      Monto
-                    </th>
-                  </tr>
-                </thead>
+                <TableHead />
                 <tbody>
                   <tr className="bg-white border-b ">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900">
@@ -163,18 +131,19 @@ const NewTransaction = ({ refresh }) => {
                         }
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900">
-                      <SelectCurrency
-                        setCurrency={setCurrency}
-                        currency={currency}
-                      />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900 esMoney">
+
+                    <td
+                      className={`"px-6 py-4 whitespace-nowrap text-sm font-light text-gray-900" ${
+                        singleAccount[0]?.currency_id == 1
+                          ? "esMoney"
+                          : "enMoney"
+                      } `}
+                    >
                       <input
                         type="number"
                         className="border w-full p-2 mt-2 placeholder-gray-400 rounded-md accountNumber  "
                         pattern="[0-9]"
-                        value={ammount === 0 ? "Número de cuenta" : ammount}
+                        value={ammount === 0 ? "" : ammount}
                         onChange={(e) => setAmmount(e.target.value)}
                         onWheel={(e) => e.target.blur()}
                       />

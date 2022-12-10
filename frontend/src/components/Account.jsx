@@ -44,18 +44,16 @@ const Account = ({ account }) => {
                 </p>
 
                 <p className="w-full flex flex-row justify-end">
-                  <span className="text-3xl font-bold text-gray-600 esMoney">
+                  <span
+                    className={` ${
+                      account.currency_id == 1 ? "esMoney" : "enMoney"
+                    } text-3xl font-bold text-gray-600`}
+                  >
                     {balance}
                   </span>
                 </p>
               </div>
               <div className="w-full flex flex-row justify-center gap-6">
-                {/*<button
-                  type="button"
-                  className=" inline-block px-6 py-2.5 bg-sky-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-sky-700 hover:shadow-lg focus:bg-sky-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-sky-700 active:shadow-lg transition duration-100 ease-in-out"
-                >
-                  Editar
-      </button>*/}
                 <button
                   type="button"
                   className=" inline-block px-6 py-2.5 bg-rose-700 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-rose-800 hover:shadow-lg focus:bg-rose-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg transition duration-100 ease-in-out"

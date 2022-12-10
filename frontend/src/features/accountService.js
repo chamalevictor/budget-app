@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { accountActions } from "./accountSlice";
 import axiosClient from "../config/axiosClient";
+import { useDispatch } from "react-redux";
 
 const getConfig = () => {
   const token = localStorage.getItem("token");
@@ -27,6 +28,7 @@ export const getAccounts = createAsyncThunk(
     } finally {
       setTimeout(() => {
         thunkApi.dispatch(accountActions.loadingAccounts(false));
+        thunkApi.dispatch(accountActions.createNewAccountCompleted(false));
       }, 750);
     }
   }
@@ -47,9 +49,11 @@ export const createAccount = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
+      thunkApi.dispatch(accountActions.loadingAccounts(false));
     } finally {
       setTimeout(() => {
         thunkApi.dispatch(accountActions.loadingAccounts(false));
+        thunkApi.dispatch(accountActions.createNewAccountCompleted(true));
       }, 1500);
     }
   }
@@ -100,6 +104,28 @@ export const markAccountAsDeleted = createAsyncThunk(
       setTimeout(() => {
         thunkApi.dispatch(accountActions.loadingAccounts(false));
       }, 750);
+    }
+  }
+);
+
+export const getSigleAccountService = createAsyncThunk(
+  "Get Single Account",
+  async (account_id, thunkApi) => {
+    try {
+      thunkApi.dispatch(accountActions.getSingleAccount(account_id));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const destinationAccountService = createAsyncThunk(
+  "Set Destination Account",
+  async (account_id, thunkApi) => {
+    try {
+      thunkApi.dispatch(accountActions.setDestinationAccount(account_id));
+    } catch (error) {
+      console.log(error);
     }
   }
 );

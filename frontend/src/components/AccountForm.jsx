@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { createAccount, getAccounts } from "../features/accountService";
-import { transactionActions } from "../features/transactionSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CurrenciesRadioButton from "./CurrenciesRadioButton";
 import SelectAccountType from "./SelectAccountType";
 import SelectBank from "./SelectBank";
 import Alert from "./Alert";
 import { useEffect } from "react";
-import { getAllTransactions } from "../features/transactionServices";
 
 const AccountForm = ({ setAddAccount }) => {
   const dispatch = useDispatch();
@@ -20,16 +18,6 @@ const AccountForm = ({ setAddAccount }) => {
   const generateAccountNumber = () => {
     return Math.floor(100000 + Math.random() * 900000);
   };
-
-  // useEffect(() => {
-  //   if (transactionCompleted) {
-  //     dispatch(getAccounts());
-  //   }
-
-  //   return () => {
-  //     dispatch(transactionActions.transactionCompleted(false));
-  //   };
-  // }, [transactionCompleted]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,14 +37,15 @@ const AccountForm = ({ setAddAccount }) => {
       id_currency,
     };
     dispatch(createAccount(newAccount));
-    dispatch(getAccounts());
     setAddAccount(false);
   };
+
   useEffect(() => {
     if (id_bank == 1) {
       setIdAccount(generateAccountNumber());
     }
   }, [id_bank]);
+
   const { msg } = alert;
 
   return (
