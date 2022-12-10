@@ -14,20 +14,21 @@ dotenv.config(); // To access env variables
 app.use(express.json()); // To use req.body
 
 // Configure CORS.
-const whiteList = ["http://127.0.0.1:5173"];
+// const whiteList = ["http://127.0.0.1:5173"];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whiteList.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Error de CORS"));
-    }
-  },
-};
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whiteList.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Error de CORS"));
+//     }
+//   },
+// };
 
 // TODO: reactivate cors options.
 app.use(cors());
+
 // Routing
 app.use("/api/users", userRoutes);
 app.use("/api/accounts", accountRoutes);

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: front-app
-          image: victor750/budget-app-frontend:2.2.2
+          image: victor750/budget-app-frontend:4.4.4
           resources:
             limits:
               memory: "256Mi"
