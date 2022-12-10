@@ -1,7 +1,7 @@
 # docker build -t backend:1.0.0 . 
 # docker run -it -d -p 4000:4000 backend:1.0.0
 
-FROM node:18-alpine3.15
+FROM node:18.12-alpine3.15
 
 ENV DB_USER_ID=postgres \
     DB_PASSWORD=mypass \ 
